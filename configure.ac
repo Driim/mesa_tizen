@@ -1874,6 +1874,11 @@ for plat in $platforms; do
         DEFINES="$DEFINES -DHAVE_SURFACELESS_PLATFORM"
         ;;
 
+    tizen)
+        PKG_CHECK_MODULES([TIZEN], [tpl-egl libtbm libtdm wayland-client dlog])
+        DEFINES="$DEFINES -DHAVE_TIZEN_PLATFORM"
+        ;;
+
     android)
         PKG_CHECK_MODULES([ANDROID], [cutils hardware sync])
         if test -n "$with_gallium_drivers"; then
@@ -1933,6 +1938,7 @@ AM_CONDITIONAL(HAVE_PLATFORM_WAYLAND, echo "$platforms" | grep -q 'wayland')
 AM_CONDITIONAL(HAVE_PLATFORM_DRM, echo "$platforms" | grep -q 'drm')
 AM_CONDITIONAL(HAVE_PLATFORM_SURFACELESS, echo "$platforms" | grep -q 'surfaceless')
 AM_CONDITIONAL(HAVE_PLATFORM_ANDROID, echo "$platforms" | grep -q 'android')
+AM_CONDITIONAL(HAVE_PLATFORM_TIZEN, echo "$platforms" | grep -q 'tizen')
 
 AC_ARG_ENABLE(xlib-lease,
     [AS_HELP_STRING([--enable-xlib-lease]
@@ -2622,13 +2628,14 @@ dnl Surfaceless is an alternative for the last one.
 dnl
 require_basic_egl() {
     case "$with_platforms" in
-        *drm*|*surfaceless*|*android*)
+        *drm*|*surfaceless*|*android*|*tizen*)
             ;;
         *)
             AC_MSG_ERROR([$1 requires one of these:
                   1) --with-platforms=drm (X, Wayland, offscreen rendering based on DRM)
                   2) --with-platforms=surfaceless (offscreen only)
                   3) --with-platforms=android (Android only)
+                  4) --with-platforms=tizen (Tizen only)
                   Recommended options: drm,x11])
             ;;
     esac

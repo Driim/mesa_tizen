@@ -32,6 +32,7 @@
 
 #include <stdbool.h>
 #include "egltypedefs.h"
+#include <stddef.h>
 
 
 #ifdef __cplusplus
