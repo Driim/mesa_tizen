@@ -1509,13 +1509,14 @@ dri2_initialize_tizen(_EGLDriver *drv, _EGLDisplay *disp)
    }
    dri2_dpy->tpl_display = tpl_display;
 
+   /* TODO: realize in tbm backend */
    /* Get tbm_bufmgr's fd */
-   tbm_bufmgr_fd = tbm_drm_helper_get_fd();
+   // tbm_bufmgr_fd = tbm_drm_helper_get_fd();
 
-   if (tbm_bufmgr_fd == -1) {
-      err = "DRI2: failed to get tbm_bufmgr fd";
-      goto cleanup_device;
-   }
+   // if (tbm_bufmgr_fd == -1) {
+   //    err = "DRI2: failed to get tbm_bufmgr fd";
+   //    goto cleanup_device;
+   // }
 
    if (hw_accel) {
       int fd = -1;

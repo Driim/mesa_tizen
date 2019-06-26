@@ -62,7 +62,7 @@ Obsoletes: libgbm
 
 %package -n libgbm
 Summary: GBM package
-Requires: %{name}-data = %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 License: LGPL-2.1+
 
 %description -n libgbm
@@ -71,7 +71,7 @@ GBM package library.
 %package -n libgbm-devel
 Summary:  Development components for the GBM package
 Group:    Graphics & UI Framework/Development
-Requires: eina = %{version}-%{release}
+Requires: libgbm = %{version}-%{release}
 License: LGPL-2.1+
 
 %description -n libgbm-devel
@@ -90,7 +90,7 @@ cp %{SOURCE1002} .
 			--disable-dri3 \
 			--enable-gles2 \
 			--enable-shared-glapi \
-			--with-platforms="drm,tizen" \
+			--with-platforms="tizen" \
 %ifarch %ix86 x86_64
 			--with-dri-drivers="i915,swrast" \
 			--with-gallium-drivers="i915,swrast"
