@@ -56,25 +56,25 @@ just Mesa or The Mesa 3-D graphics library.
 
 * OpenGL is a trademark of Silicon Graphics Incorporated.
 
-############ libgbm
-Provides: libgbm
-Obsoletes: libgbm
+############ mesa-gbm
+Provides: mesa-gbm
+Obsoletes: mesa-gbm
 
-%package -n libgbm
+%package -n mesa-gbm
 Summary: GBM package
 Requires: %{name} = %{version}-%{release}
 License: LGPL-2.1+
 
-%description -n libgbm
+%description -n mesa-gbm
 GBM package library.
 
-%package -n libgbm-devel
+%package -n mesa-gbm-devel
 Summary:  Development components for the GBM package
 Group:    Graphics & UI Framework/Development
-Requires: libgbm = %{version}-%{release}
+Requires: mesa-gbm = %{version}-%{release}
 License: LGPL-2.1+
 
-%description -n libgbm-devel
+%description -n mesa-gbm-devel
 Development files for GBM package
 
 %prep
@@ -111,6 +111,9 @@ cp -a  %{buildroot}%{_libdir}/libGLES* %{buildroot}%{_libdir}/driver
 mkdir -p %{buildroot}/etc/udev/rules.d
 cp 99-GPU-Acceleration.rules %{buildroot}/etc/udev/rules.d
 
+mkdir -p %{buildroot}%{_includedir}/mesa-gbm
+cp -a  %{buildroot}%{_includedir}/gbm.h %{buildroot}%{_includedir}/mesa-gbm
+
 %files
 %define _unpackaged_files_terminate_build 0
 %manifest %{name}.manifest
@@ -120,14 +123,14 @@ cp 99-GPU-Acceleration.rules %{buildroot}/etc/udev/rules.d
 %{_libdir}/dri/*
 /etc/udev/rules.d/99-GPU-Acceleration.rules
 
-%files -n libgbm
+%files -n mesa-gbm
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_libdir}/libgbm.so.*
+%{_libdir}/libmesagbm.so.*
 
-%files -n libgbm-devel
+%files -n mesa-gbm-devel
 %manifest %{name}.manifest
 %defattr(-,root,root,-)
-%{_includedir}/gbm.h
-%{_libdir}/libgbm.so
-%{_libdir}/pkgconfig/gbm.pc
+%{_includedir}/mesa-gbm/gbm.h
+%{_libdir}/libmesagbm.so
+%{_libdir}/pkgconfig/mesa-gbm.pc

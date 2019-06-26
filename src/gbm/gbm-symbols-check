@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-LIB=${1-.libs/libgbm.so}
+LIB=${1-.libs/libmesagbm.so}
 
 if ! [ -f "$LIB" ]
 then

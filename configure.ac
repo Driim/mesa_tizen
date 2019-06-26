@@ -3170,7 +3170,7 @@ AC_CONFIG_FILES([Makefile
                  src/gallium/winsys/virgl/drm/Makefile
                  src/gallium/winsys/virgl/vtest/Makefile
                  src/gbm/Makefile
-                 src/gbm/main/gbm.pc
+                 src/gbm/main/mesa-gbm.pc
                  src/glx/Makefile
                  src/glx/apple/Makefile
                  src/glx/tests/Makefile
