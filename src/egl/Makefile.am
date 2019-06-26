@@ -99,7 +99,7 @@ dri2_backend_GENERATED_FILES += \
 endif
 
 if HAVE_PLATFORM_DRM
-libEGL_common_la_LIBADD += $(top_builddir)/src/gbm/libgbm.la
+libEGL_common_la_LIBADD += $(top_builddir)/src/gbm/libmesagbm.la
 dri2_backend_FILES += drivers/dri2/platform_drm.c
 endif
 
