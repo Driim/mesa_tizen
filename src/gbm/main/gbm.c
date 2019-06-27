@@ -50,7 +50,7 @@
  * \return The fd that the struct gbm_device was created with
  */
 GBM_EXPORT int
-gbm_device_get_fd(struct gbm_device *gbm)
+mesa_gbm_device_get_fd(struct gbm_device *gbm)
 {
    return gbm->fd;
 }
@@ -61,7 +61,7 @@ gbm_device_get_fd(struct gbm_device *gbm)
  * be freed
  */
 GBM_EXPORT const char *
-gbm_device_get_backend_name(struct gbm_device *gbm)
+mesa_gbm_device_get_backend_name(struct gbm_device *gbm)
 {
    return gbm->name;
 }
@@ -79,7 +79,7 @@ gbm_device_get_backend_name(struct gbm_device *gbm)
  * \sa enum gbm_bo_format for the list of formats
  */
 GBM_EXPORT int
-gbm_device_is_format_supported(struct gbm_device *gbm,
+mesa_gbm_device_is_format_supported(struct gbm_device *gbm,
                                uint32_t format, uint32_t usage)
 {
    return gbm->is_format_supported(gbm, format, usage);
@@ -87,12 +87,12 @@ gbm_device_is_format_supported(struct gbm_device *gbm,
 
 /** Get the number of planes that are required for a given format+modifier
  *
- * \param gbm The gbm device returned from gbm_create_device()
+ * \param gbm The gbm device returned from mesa_gbm_create_device()
  * \param format The format to query
  * \param modifier The modifier to query
  */
 GBM_EXPORT int
-gbm_device_get_format_modifier_plane_count(struct gbm_device *gbm,
+mesa_gbm_device_get_format_modifier_plane_count(struct gbm_device *gbm,
                                            uint32_t format,
                                            uint64_t modifier)
 {
@@ -101,10 +101,10 @@ gbm_device_get_format_modifier_plane_count(struct gbm_device *gbm,
 
 /** Destroy the gbm device and free all resources associated with it.
  *
- * \param gbm The device created using gbm_create_device()
+ * \param gbm The device created using mesa_gbm_create_device()
  */
 GBM_EXPORT void
-gbm_device_destroy(struct gbm_device *gbm)
+mesa_gbm_device_destroy(struct gbm_device *gbm)
 {
    gbm->refcount--;
    if (gbm->refcount == 0)
@@ -120,11 +120,11 @@ gbm_device_destroy(struct gbm_device *gbm)
  *
  * \param fd The file descriptor for a backend specific device
  * \return The newly created struct gbm_device. The resources associated with
- * the device should be freed with gbm_device_destroy() when it is no longer
+ * the device should be freed with mesa_gbm_device_destroy() when it is no longer
  * needed. If the creation of the device failed NULL will be returned.
  */
 GBM_EXPORT struct gbm_device *
-gbm_create_device(int fd)
+mesa_gbm_create_device(int fd)
 {
    struct gbm_device *gbm = NULL;
    struct stat buf;
@@ -138,7 +138,7 @@ gbm_create_device(int fd)
    if (gbm == NULL)
       return NULL;
 
-   gbm->dummy = gbm_create_device;
+   gbm->dummy = mesa_gbm_create_device;
    gbm->stat = buf;
    gbm->refcount = 1;
 
@@ -152,7 +152,7 @@ gbm_create_device(int fd)
  *
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_width(struct gbm_bo *bo)
+mesa_gbm_bo_get_width(struct gbm_bo *bo)
 {
    return bo->width;
 }
@@ -163,7 +163,7 @@ gbm_bo_get_width(struct gbm_bo *bo)
  * \return The height of the allocated buffer object
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_height(struct gbm_bo *bo)
+mesa_gbm_bo_get_height(struct gbm_bo *bo)
 {
    return bo->height;
 }
@@ -171,15 +171,15 @@ gbm_bo_get_height(struct gbm_bo *bo)
 /** Get the stride of the buffer object
  *
  * This is calculated by the backend when it does the allocation in
- * gbm_bo_create()
+ * mesa_gbm_bo_create()
  *
  * \param bo The buffer object
  * \return The stride of the allocated buffer object in bytes
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_stride(struct gbm_bo *bo)
+mesa_gbm_bo_get_stride(struct gbm_bo *bo)
 {
-   return gbm_bo_get_stride_for_plane(bo, 0);
+   return mesa_gbm_bo_get_stride_for_plane(bo, 0);
 }
 
 /** Get the stride for the given plane
@@ -187,10 +187,10 @@ gbm_bo_get_stride(struct gbm_bo *bo)
  * \param bo The buffer object
  * \param plane for which you want the stride
  *
- * \sa gbm_bo_get_stride()
+ * \sa mesa_gbm_bo_get_stride()
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_stride_for_plane(struct gbm_bo *bo, int plane)
+mesa_gbm_bo_get_stride_for_plane(struct gbm_bo *bo, int plane)
 {
    return bo->gbm->bo_get_stride(bo, plane);
 }
@@ -203,7 +203,7 @@ gbm_bo_get_stride_for_plane(struct gbm_bo *bo, int plane)
  * \return The format of buffer object, one of the GBM_FORMAT_* codes
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_format(struct gbm_bo *bo)
+mesa_gbm_bo_get_format(struct gbm_bo *bo)
 {
    return bo->format;
 }
@@ -221,7 +221,7 @@ gbm_bo_get_format(struct gbm_bo *bo)
  * \return The number of bits0per-pixel of the buffer object's format.
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_bpp(struct gbm_bo *bo)
+mesa_gbm_bo_get_bpp(struct gbm_bo *bo)
 {
    switch (bo->format) {
       default:
@@ -284,7 +284,7 @@ gbm_bo_get_bpp(struct gbm_bo *bo)
  * \return The offset
  */
 GBM_EXPORT uint32_t
-gbm_bo_get_offset(struct gbm_bo *bo, int plane)
+mesa_gbm_bo_get_offset(struct gbm_bo *bo, int plane)
 {
    return bo->gbm->bo_get_offset(bo, plane);
 }
@@ -295,7 +295,7 @@ gbm_bo_get_offset(struct gbm_bo *bo, int plane)
  * \return Returns the gbm device with which the buffer object was created
  */
 GBM_EXPORT struct gbm_device *
-gbm_bo_get_device(struct gbm_bo *bo)
+mesa_gbm_bo_get_device(struct gbm_bo *bo)
 {
 	return bo->gbm;
 }
@@ -309,7 +309,7 @@ gbm_bo_get_device(struct gbm_bo *bo)
  * \return Returns the handle of the allocated buffer object
  */
 GBM_EXPORT union gbm_bo_handle
-gbm_bo_get_handle(struct gbm_bo *bo)
+mesa_gbm_bo_get_handle(struct gbm_bo *bo)
 {
    return bo->handle;
 }
@@ -317,7 +317,7 @@ gbm_bo_get_handle(struct gbm_bo *bo)
 /** Get a DMA-BUF file descriptor for the buffer object
  *
  * This function creates a DMA-BUF (also known as PRIME) file descriptor
- * handle for the buffer object.  Each call to gbm_bo_get_fd() returns a new
+ * handle for the buffer object.  Each call to mesa_gbm_bo_get_fd() returns a new
  * file descriptor and the caller is responsible for closing the file
  * descriptor.
 
@@ -326,7 +326,7 @@ gbm_bo_get_handle(struct gbm_bo *bo)
  * if an error occurs.
  */
 GBM_EXPORT int
-gbm_bo_get_fd(struct gbm_bo *bo)
+mesa_gbm_bo_get_fd(struct gbm_bo *bo)
 {
    return bo->gbm->bo_get_fd(bo);
 }
@@ -337,7 +337,7 @@ gbm_bo_get_fd(struct gbm_bo *bo)
  * \return The number of planes
  */
 GBM_EXPORT int
-gbm_bo_get_plane_count(struct gbm_bo *bo)
+mesa_gbm_bo_get_plane_count(struct gbm_bo *bo)
 {
    return bo->gbm->bo_get_planes(bo);
 }
@@ -352,10 +352,10 @@ gbm_bo_get_plane_count(struct gbm_bo *bo)
  * \param bo The buffer object
  * \param plane the plane to get a handle for
  *
- * \sa gbm_bo_get_handle()
+ * \sa mesa_gbm_bo_get_handle()
  */
 GBM_EXPORT union gbm_bo_handle
-gbm_bo_get_handle_for_plane(struct gbm_bo *bo, int plane)
+mesa_gbm_bo_get_handle_for_plane(struct gbm_bo *bo, int plane)
 {
    return bo->gbm->bo_get_handle(bo, plane);
 }
@@ -369,12 +369,12 @@ gbm_bo_get_handle_for_plane(struct gbm_bo *bo, int plane)
  * \param bo The buffer object
  * \return Returns the selected modifier (chosen by the implementation) for the
  * BO.
- * \sa gbm_bo_create_with_modifiers() where possible modifiers are set
- * \sa gbm_surface_create_with_modifiers() where possible modifiers are set
+ * \sa mesa_gbm_bo_create_with_modifiers() where possible modifiers are set
+ * \sa mesa_gbm_surface_create_with_modifiers() where possible modifiers are set
  * \sa define DRM_FORMAT_MOD_* in drm_fourcc.h for possible modifiers
  */
 GBM_EXPORT uint64_t
-gbm_bo_get_modifier(struct gbm_bo *bo)
+mesa_gbm_bo_get_modifier(struct gbm_bo *bo)
 {
    return bo->gbm->bo_get_modifier(bo);
 }
@@ -393,7 +393,7 @@ gbm_bo_get_modifier(struct gbm_bo *bo)
  * \return Returns 0 on success, otherwise -1 is returned an errno set
  */
 GBM_EXPORT int
-gbm_bo_write(struct gbm_bo *bo, const void *buf, size_t count)
+mesa_gbm_bo_write(struct gbm_bo *bo, const void *buf, size_t count)
 {
    return bo->gbm->bo_write(bo, buf, count);
 }
@@ -406,7 +406,7 @@ gbm_bo_write(struct gbm_bo *bo, const void *buf, size_t count)
  * called prior to the buffer destruction
  */
 GBM_EXPORT void
-gbm_bo_set_user_data(struct gbm_bo *bo, void *data,
+mesa_gbm_bo_set_user_data(struct gbm_bo *bo, void *data,
 		     void (*destroy_user_data)(struct gbm_bo *, void *))
 {
    bo->user_data = data;
@@ -419,10 +419,10 @@ gbm_bo_set_user_data(struct gbm_bo *bo, void *data,
  * \return Returns the user data associated with the buffer object or %NULL
  * if no data was associated with it
  *
- * \sa gbm_bo_set_user_data()
+ * \sa mesa_gbm_bo_set_user_data()
  */
 GBM_EXPORT void *
-gbm_bo_get_user_data(struct gbm_bo *bo)
+mesa_gbm_bo_get_user_data(struct gbm_bo *bo)
 {
    return bo->user_data;
 }
@@ -434,7 +434,7 @@ gbm_bo_get_user_data(struct gbm_bo *bo)
  * \param bo The buffer object
  */
 GBM_EXPORT void
-gbm_bo_destroy(struct gbm_bo *bo)
+mesa_gbm_bo_destroy(struct gbm_bo *bo)
 {
    if (bo->destroy_user_data)
       bo->destroy_user_data(bo, bo->user_data);
@@ -445,13 +445,13 @@ gbm_bo_destroy(struct gbm_bo *bo)
 /**
  * Allocate a buffer object for the given dimensions
  *
- * \param gbm The gbm device returned from gbm_create_device()
+ * \param gbm The gbm device returned from mesa_gbm_create_device()
  * \param width The width for the buffer
  * \param height The height for the buffer
  * \param format The format to use for the buffer
  * \param usage The union of the usage flags for this buffer
  *
- * \return A newly allocated buffer that should be freed with gbm_bo_destroy()
+ * \return A newly allocated buffer that should be freed with mesa_gbm_bo_destroy()
  * when no longer needed. If an error occurs during allocation %NULL will be
  * returned and errno set.
  *
@@ -459,7 +459,7 @@ gbm_bo_destroy(struct gbm_bo *bo)
  * \sa enum gbm_bo_flags for the list of usage flags
  */
 GBM_EXPORT struct gbm_bo *
-gbm_bo_create(struct gbm_device *gbm,
+mesa_gbm_bo_create(struct gbm_device *gbm,
               uint32_t width, uint32_t height,
               uint32_t format, uint32_t usage)
 {
@@ -472,7 +472,7 @@ gbm_bo_create(struct gbm_device *gbm,
 }
 
 GBM_EXPORT struct gbm_bo *
-gbm_bo_create_with_modifiers(struct gbm_device *gbm,
+mesa_gbm_bo_create_with_modifiers(struct gbm_device *gbm,
                              uint32_t width, uint32_t height,
                              uint32_t format,
                              const uint64_t *modifiers,
@@ -505,19 +505,19 @@ gbm_bo_create_with_modifiers(struct gbm_device *gbm,
  * The gbm bo shares the underlying pixels but its life-time is
  * independent of the foreign object.
  *
- * \param gbm The gbm device returned from gbm_create_device()
+ * \param gbm The gbm device returned from mesa_gbm_create_device()
  * \param type The type of object we're importing
  * \param buffer Pointer to the external object
  * \param usage The union of the usage flags for this buffer
  *
  * \return A newly allocated buffer object that should be freed with
- * gbm_bo_destroy() when no longer needed. On error, %NULL is returned
+ * mesa_gbm_bo_destroy() when no longer needed. On error, %NULL is returned
  * and errno is set.
  *
  * \sa enum gbm_bo_flags for the list of usage flags
  */
 GBM_EXPORT struct gbm_bo *
-gbm_bo_import(struct gbm_device *gbm,
+mesa_gbm_bo_import(struct gbm_device *gbm,
               uint32_t type, void *buffer, uint32_t usage)
 {
    return gbm->bo_import(gbm, type, buffer, usage);
@@ -541,13 +541,13 @@ gbm_bo_import(struct gbm_device *gbm,
  * \param map_data Returned opaque ptr for the mapped region
  *
  * \return Address of the mapped buffer that should be unmapped with
- * gbm_bo_unmap() when no longer needed. On error, %NULL is returned
+ * mesa_gbm_bo_unmap() when no longer needed. On error, %NULL is returned
  * and errno is set.
  *
  * \sa enum gbm_bo_transfer_flags for the list of flags
  */
 GBM_EXPORT void *
-gbm_bo_map(struct gbm_bo *bo,
+mesa_gbm_bo_map(struct gbm_bo *bo,
               uint32_t x, uint32_t y,
               uint32_t width, uint32_t height,
               uint32_t flags, uint32_t *stride, void **map_data)
@@ -568,10 +568,10 @@ gbm_bo_map(struct gbm_bo *bo,
  * access.
  *
  * \param bo The buffer object
- * \param map_data opaque ptr returned from prior gbm_bo_map
+ * \param map_data opaque ptr returned from prior mesa_gbm_bo_map
  */
 GBM_EXPORT void
-gbm_bo_unmap(struct gbm_bo *bo, void *map_data)
+mesa_gbm_bo_unmap(struct gbm_bo *bo, void *map_data)
 {
    bo->gbm->bo_unmap(bo, map_data);
 }
@@ -579,19 +579,19 @@ gbm_bo_unmap(struct gbm_bo *bo, void *map_data)
 /**
  * Allocate a surface object
  *
- * \param gbm The gbm device returned from gbm_create_device()
+ * \param gbm The gbm device returned from mesa_gbm_create_device()
  * \param width The width for the surface
  * \param height The height for the surface
  * \param format The format to use for the surface
  *
  * \return A newly allocated surface that should be freed with
- * gbm_surface_destroy() when no longer needed. If an error occurs
+ * mesa_gbm_surface_destroy() when no longer needed. If an error occurs
  * during allocation %NULL will be returned.
  *
  * \sa enum gbm_bo_format for the list of formats
  */
 GBM_EXPORT struct gbm_surface *
-gbm_surface_create(struct gbm_device *gbm,
+mesa_gbm_surface_create(struct gbm_device *gbm,
                    uint32_t width, uint32_t height,
 		   uint32_t format, uint32_t flags)
 {
@@ -599,7 +599,7 @@ gbm_surface_create(struct gbm_device *gbm,
 }
 
 GBM_EXPORT struct gbm_surface *
-gbm_surface_create_with_modifiers(struct gbm_device *gbm,
+mesa_gbm_surface_create_with_modifiers(struct gbm_device *gbm,
                                   uint32_t width, uint32_t height,
                                   uint32_t format,
                                   const uint64_t *modifiers,
@@ -618,13 +618,13 @@ gbm_surface_create_with_modifiers(struct gbm_device *gbm,
  * Destroys the given surface and frees all resources associated with
  * it.
  *
- * All buffers locked with gbm_surface_lock_front_buffer() should be
+ * All buffers locked with mesa_gbm_surface_lock_front_buffer() should be
  * released prior to calling this function.
  *
  * \param surf The surface
  */
 GBM_EXPORT void
-gbm_surface_destroy(struct gbm_surface *surf)
+mesa_gbm_surface_destroy(struct gbm_surface *surf)
 {
    surf->gbm->surface_destroy(surf);
 }
@@ -633,7 +633,7 @@ gbm_surface_destroy(struct gbm_surface *surf)
  * Lock the surface's current front buffer
  *
  * Lock rendering to the surface's current front buffer until it is
- * released with gbm_surface_release_buffer().
+ * released with mesa_gbm_surface_release_buffer().
  *
  * This function must be called exactly once after calling
  * eglSwapBuffers.  Calling it before any eglSwapBuffer has happened
@@ -645,19 +645,19 @@ gbm_surface_destroy(struct gbm_surface *surf)
  * \param surf The surface
  *
  * \return A buffer object that should be released with
- * gbm_surface_release_buffer() when no longer needed.  The implementation
- * is free to reuse buffers released with gbm_surface_release_buffer() so
- * this bo should not be destroyed using gbm_bo_destroy().  If an error
+ * mesa_gbm_surface_release_buffer() when no longer needed.  The implementation
+ * is free to reuse buffers released with mesa_gbm_surface_release_buffer() so
+ * this bo should not be destroyed using mesa_gbm_bo_destroy().  If an error
  * occurs this function returns %NULL.
  */
 GBM_EXPORT struct gbm_bo *
-gbm_surface_lock_front_buffer(struct gbm_surface *surf)
+mesa_gbm_surface_lock_front_buffer(struct gbm_surface *surf)
 {
    return surf->gbm->surface_lock_front_buffer(surf);
 }
 
 /**
- * Release a locked buffer obtained with gbm_surface_lock_front_buffer()
+ * Release a locked buffer obtained with mesa_gbm_surface_lock_front_buffer()
  *
  * Returns the underlying buffer to the gbm surface.  Releasing a bo
  * will typically make gbm_surface_has_free_buffer() return 1 and thus
@@ -669,7 +669,7 @@ gbm_surface_lock_front_buffer(struct gbm_surface *surf)
  * \param bo The buffer object
  */
 GBM_EXPORT void
-gbm_surface_release_buffer(struct gbm_surface *surf, struct gbm_bo *bo)
+mesa_gbm_surface_release_buffer(struct gbm_surface *surf, struct gbm_bo *bo)
 {
    surf->gbm->surface_release_buffer(surf, bo);
 }
@@ -680,18 +680,18 @@ gbm_surface_release_buffer(struct gbm_surface *surf, struct gbm_bo *bo)
  * Before starting a new frame, the surface must have a buffer
  * available for rendering.  Initially, a gbm surface will have a free
  * buffer, but after one or more buffers have been locked (\sa
- * gbm_surface_lock_front_buffer()), the application must check for a
+ * mesa_gbm_surface_lock_front_buffer()), the application must check for a
  * free buffer before rendering.
  *
  * If a surface doesn't have a free buffer, the application must
- * return a buffer to the surface using gbm_surface_release_buffer()
+ * return a buffer to the surface using mesa_gbm_surface_release_buffer()
  * and after that, the application can query for free buffers again.
  *
  * \param surf The surface
  * \return 1 if the surface has free buffers, 0 otherwise
  */
 GBM_EXPORT int
-gbm_surface_has_free_buffers(struct gbm_surface *surf)
+mesa_gbm_surface_has_free_buffers(struct gbm_surface *surf)
 {
    return surf->gbm->surface_has_free_buffers(surf);
 }

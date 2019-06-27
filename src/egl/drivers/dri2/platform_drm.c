@@ -222,7 +222,7 @@ dri2_drm_destroy_surface(_EGLDriver *drv, _EGLDisplay *disp, _EGLSurface *surf)
 
    for (unsigned i = 0; i < ARRAY_SIZE(dri2_surf->color_buffers); i++) {
       if (dri2_surf->color_buffers[i].bo)
-	 gbm_bo_destroy(dri2_surf->color_buffers[i].bo);
+	 mesa_gbm_bo_destroy(dri2_surf->color_buffers[i].bo);
    }
 
    dri2_egl_surface_free_local_buffers(dri2_surf);
@@ -255,14 +255,14 @@ get_back_bo(struct dri2_egl_surface *dri2_surf)
       return -1;
    if (dri2_surf->back->bo == NULL) {
       if (surf->base.modifiers)
-         dri2_surf->back->bo = gbm_bo_create_with_modifiers(&dri2_dpy->gbm_dri->base,
+         dri2_surf->back->bo = mesa_gbm_bo_create_with_modifiers(&dri2_dpy->gbm_dri->base,
                                                             surf->base.width,
                                                             surf->base.height,
                                                             surf->base.format,
                                                             surf->base.modifiers,
                                                             surf->base.count);
       else
-         dri2_surf->back->bo = gbm_bo_create(&dri2_dpy->gbm_dri->base,
+         dri2_surf->back->bo = mesa_gbm_bo_create(&dri2_dpy->gbm_dri->base,
                                              surf->base.width,
                                              surf->base.height,
                                              surf->base.format,
@@ -288,7 +288,7 @@ get_swrast_front_bo(struct dri2_egl_surface *dri2_surf)
    }
 
    if (dri2_surf->current->bo == NULL)
-      dri2_surf->current->bo = gbm_bo_create(&dri2_dpy->gbm_dri->base,
+      dri2_surf->current->bo = mesa_gbm_bo_create(&dri2_dpy->gbm_dri->base,
                                              surf->base.width, surf->base.height,
                                              surf->base.format, surf->base.flags);
    if (dri2_surf->current->bo == NULL)
@@ -545,7 +545,7 @@ swrast_put_image2(__DRIdrawable *driDrawable,
 
    bo = gbm_dri_bo(dri2_surf->current->bo);
 
-   bpp = gbm_bo_get_bpp(&bo->base);
+   bpp = mesa_gbm_bo_get_bpp(&bo->base);
    if (bpp == 0)
       return;
 
@@ -590,7 +590,7 @@ swrast_get_image(__DRIdrawable *driDrawable,
 
    bo = gbm_dri_bo(dri2_surf->current->bo);
 
-   bpp = gbm_bo_get_bpp(&bo->base);
+   bpp = mesa_gbm_bo_get_bpp(&bo->base);
    if (bpp == 0)
       return;
 
@@ -718,21 +718,21 @@ dri2_initialize_drm(_EGLDriver *drv, _EGLDisplay *disp)
       int n = snprintf(buf, sizeof(buf), DRM_DEV_NAME, DRM_DIR_NAME, 0);
       if (n != -1 && n < sizeof(buf))
          dri2_dpy->fd = loader_open_device(buf);
-      gbm = gbm_create_device(dri2_dpy->fd);
+      gbm = mesa_gbm_create_device(dri2_dpy->fd);
       if (gbm == NULL) {
          err = "DRI2: failed to create gbm device";
          goto cleanup;
       }
       dri2_dpy->own_device = true;
    } else {
-      dri2_dpy->fd = fcntl(gbm_device_get_fd(gbm), F_DUPFD_CLOEXEC, 3);
+      dri2_dpy->fd = fcntl(mesa_gbm_device_get_fd(gbm), F_DUPFD_CLOEXEC, 3);
       if (dri2_dpy->fd < 0) {
          err = "DRI2: failed to fcntl() existing gbm device";
          goto cleanup;
       }
    }
 
-   if (strcmp(gbm_device_get_backend_name(gbm), "drm") != 0) {
+   if (strcmp(mesa_gbm_device_get_backend_name(gbm), "drm") != 0) {
       err = "DRI2: gbm device using incorrect/incompatible backend";
       goto cleanup;
    }
@@ -805,5 +805,5 @@ void
 dri2_teardown_drm(struct dri2_egl_display *dri2_dpy)
 {
    if (dri2_dpy->own_device)
-      gbm_device_destroy(&dri2_dpy->gbm_dri->base);
+      mesa_gbm_device_destroy(&dri2_dpy->gbm_dri->base);
 }

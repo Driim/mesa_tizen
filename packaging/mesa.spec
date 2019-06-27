@@ -90,7 +90,7 @@ cp %{SOURCE1002} .
 			--disable-dri3 \
 			--enable-gles2 \
 			--enable-shared-glapi \
-			--with-platforms="tizen" \
+			--with-platforms="tizen,drm" \
 %ifarch %ix86 x86_64
 			--with-dri-drivers="i915,swrast" \
 			--with-gallium-drivers="i915,swrast"

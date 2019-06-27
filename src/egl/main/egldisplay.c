@@ -129,7 +129,7 @@ _eglNativePlatformDetectNativeDisplay(void *nativeDisplay)
 
 #ifdef HAVE_DRM_PLATFORM
       /* gbm has a pointer to its constructor as first element. */
-      if (first_pointer == gbm_create_device)
+      if (first_pointer == mesa_gbm_create_device)
          return _EGL_PLATFORM_DRM;
 #endif
 
